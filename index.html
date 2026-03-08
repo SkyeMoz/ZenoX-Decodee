@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZenoX Decryptor</title>
 <style>
-    /* Base page styles */
+    /* Prevent text selection/highlight */
+    * {
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* IE10+/Edge */
+        user-select: none;         /* Standard */
+    }
+
     body {
         font-family: 'Courier New', monospace;
         background: linear-gradient(135deg, #0b0b0b, #111111);
@@ -13,34 +20,37 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 30px 20px;
+        padding: 20px;
         min-height: 100vh;
-        transition: background 0.5s;
+        box-sizing: border-box;
     }
 
     h1 {
-        font-size: 3rem;
+        font-size: 2.2rem;
         margin: 0;
+        text-align: center;
         text-shadow: 0 0 8px #00ffdd, 0 0 16px #ff00aa;
     }
 
     h2 {
-        font-size: 1.5rem;
-        margin: 5px 0 30px 0;
+        font-size: 1rem;
+        margin: 5px 0 20px 0;
+        text-align: center;
         color: #ff00aa;
         text-shadow: 0 0 5px #ff00aa;
     }
 
     textarea {
-        width: 400px;
-        height: 120px;
-        margin: 10px 0;
-        font-size: 1.1rem;
+        width: 90%;
+        max-width: 400px;
+        height: 100px;
+        margin: 8px 0;
+        font-size: 1rem;
         background-color: #111;
         color: #00ffdd;
         border: 2px solid #00ffdd;
         border-radius: 8px;
-        padding: 12px;
+        padding: 10px;
         resize: none;
         transition: border 0.3s;
     }
@@ -51,8 +61,10 @@
     }
 
     button {
-        margin: 8px;
-        padding: 10px 22px;
+        width: 90%;
+        max-width: 400px;
+        margin: 6px 0;
+        padding: 12px;
         font-size: 1rem;
         border: none;
         border-radius: 5px;
@@ -61,22 +73,31 @@
         color: #fff;
         transition: 0.3s;
         text-shadow: 0 0 5px #fff;
+        touch-action: manipulation; /* better mobile tap */
     }
 
     button:hover {
         background-color: #ff55cc;
-        transform: scale(1.05);
+        transform: scale(1.03);
     }
 
     .description {
-        max-width: 600px;
-        margin-top: 40px;
-        font-size: 1rem;
-        line-height: 1.5;
+        max-width: 90%;
+        margin-top: 25px;
+        font-size: 0.9rem;
+        line-height: 1.4;
         color: #00ffdd;
         text-align: center;
         border-top: 1px solid #00ffdd;
-        padding-top: 20px;
+        padding-top: 15px;
+    }
+
+    @media (max-width: 500px) {
+        h1 { font-size: 1.8rem; }
+        h2 { font-size: 0.9rem; }
+        textarea { height: 80px; font-size: 0.95rem; }
+        button { font-size: 0.95rem; padding: 10px; }
+        .description { font-size: 0.85rem; }
     }
 </style>
 </head>
@@ -97,47 +118,4 @@
 <div class="description">
     Welcome to ZenoX Decryptor! This dynamic page allows you to decode any text encrypted using the custom ZenoX font. Simply paste your encrypted code in the top textbox and hit "Decrypt" to reveal the original message. You can also copy the result directly to your clipboard or clear the textboxes to start fresh.  
     <br><br>
-    The tool automatically handles special symbols like "—", replacing them with spaces for proper readability. Perfect for experimenting, decrypting codes, or just flexing your hacker vibes. Keep your texts safe, play around, and enjoy the futuristic neon-style interface while decoding!
-</div>
-
-<script>
-    // ZenoX font mapping
-    const font = {
-        "A":"𝐙","B":"𝟒","C":"𝟔","D":"𝟏","E":"𝟖","F":"𝟎","G":"𝟗","H":"𝟐","I":"𝐋","J":"𝐓","K":"𝐏","L":"𝐌",
-        "M":"𝐍","N":"𝐑","O":"𝟑","P":"𝟕","Q":"𝟓","R":"𝐊","S":"𝟏𝟎","T":"𝐉","U":"𝐇","V":"𝟐𝟖","W":"𝐁","X":"𝐂","Y":"𝐃","Z":"𝟔𝟕",
-        "a":"𝐙","b":"𝟒","c":"𝟔","d":"𝟏","e":"𝟖","f":"𝟎","g":"𝟗","h":"𝟐","i":"𝐋","j":"𝐓","k":"𝐏","l":"𝐌",
-        "m":"𝐍","n":"𝐑","o":"𝟑","p":"𝟕","q":"𝟓","r":"𝐊","s":"𝟏𝟎","t":"𝐉","u":"𝐇","v":"𝟐𝟖","w":"𝐁","x":"𝐂","y":"𝐃","z":"𝟔𝟕"
-    };
-
-    // Reverse mapping for decryption
-    const reverseFont = {};
-    for (let key in font) {
-        reverseFont[font[key]] = key;
-    }
-
-    function decryptText() {
-        let input = document.getElementById("inputText").value;
-        input = input.replace(/—/g, " "); // Replace — with space
-        let decrypted = "";
-        for (let char of input) {
-            decrypted += reverseFont[char] || char;
-        }
-        document.getElementById("outputText").value = decrypted;
-    }
-
-    function copyResult() {
-        const output = document.getElementById("outputText");
-        output.select();
-        output.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(output.value);
-        alert("Copied to clipboard!");
-    }
-
-    function clearText() {
-        document.getElementById("inputText").value = "";
-        document.getElementById("outputText").value = "";
-    }
-</script>
-
-</body>
-</html>
+    The tool automatically handles special symbols like "—", replacing them with spaces for proper readability
